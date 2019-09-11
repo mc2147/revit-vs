@@ -1,0 +1,8 @@
+C:\Iffat\Dropbox\Iffat\RevitAPI\SourceCode-2019\_Forge\MassFormer\SketchIt_Revit2\SketchIt_Revit2\bin\Debug\SketchIt_Revit2.dll
+C:\Iffat\Dropbox\Iffat\RevitAPI\SourceCode-2019\_Forge\MassFormer\SketchIt_Revit2\SketchIt_Revit2\bin\Debug\Newtonsoft.Json.dll
+C:\Iffat\Dropbox\Iffat\RevitAPI\SourceCode-2019\_Forge\MassFormer\SketchIt_Revit2\SketchIt_Revit2\bin\Debug\Newtonsoft.Json.xml
+C:\Iffat\Dropbox\Iffat\RevitAPI\SourceCode-2019\_Forge\MassFormer\SketchIt_Revit2\SketchIt_Revit2\obj\Debug\SketchIt_Revit2.csproj.CoreCompileInputs.cache
+C:\Iffat\Dropbox\Iffat\RevitAPI\SourceCode-2019\_Forge\MassFormer\SketchIt_Revit2\SketchIt_Revit2\obj\Debug\SketchIt_Revit2.csproj.CopyComplete
+C:\Iffat\Dropbox\Iffat\RevitAPI\SourceCode-2019\_Forge\MassFormer\SketchIt_Revit2\SketchIt_Revit2\obj\Debug\SketchIt_Revit2.dll
+C:\Iffat\Dropbox\Iffat\RevitAPI\SourceCode-2019\_Forge\MassFormer\SketchIt_Revit2\SketchIt_Revit2\obj\Debug\SketchIt_Revit2.pdb
+C:\Iffat\Dropbox\Iffat\RevitAPI\SourceCode-2019\_Forge\MassFormer\SketchIt_Revit2\SketchIt_Revit2\bin\Debug\SketchIt_Revit2.pdb

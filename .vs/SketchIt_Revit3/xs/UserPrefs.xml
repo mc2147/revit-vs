@@ -1,0 +1,29 @@
+﻿<Properties>
+  <MonoDevelop.Ide.Workbench ActiveDocument="SketchIt_Revit2/SketchIt.cs">
+    <Files>
+      <File FileName="SketchIt_Revit2/ObjectDefinitions.cs" Line="1" Column="1" />
+      <File FileName="SketchIt_Revit2/SketchIt.cs" Line="13" Column="1" />
+      <File FileName="SketchIt_Revit2/CurveUtils.cs" Line="8" Column="10" />
+      <File FileName="SketchIt_Revit2/BuildingObject.cs" Line="146" Column="48" />
+      <File FileName="SketchIt_Revit2/RevitUtil.cs" />
+      <File FileName="SketchIt_Revit2/SketchItParams.cs" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="SketchIt_Revit3" expanded="True">
+            <Node name="SketchIt_Revit3" expanded="True">
+              <Node name="SketchIt.cs" selected="True" />
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MultiItemStartupConfigurations />
+</Properties>
