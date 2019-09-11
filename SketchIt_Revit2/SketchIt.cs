@@ -6,24 +6,43 @@ using System.Threading.Tasks;
 
 using System.IO;
 using Autodesk.Revit.DB;
-using Autodesk.Revit.UI;
 using Autodesk.Revit.Creation;
 using static PW.RevitUtil;
 using static PW.WallUtils;
 using static PW.CurveUtils;
 using static PW.BuildingObject;
 
+using Autodesk.Revit.ApplicationServices;
+using DesignAutomationFramework;
+
 namespace PW
 {
-    /// <summary>
-    /// Implements the Revit add-in interface IExternalCommand
-    /// </summary>
     [Autodesk.Revit.Attributes.Transaction(Autodesk.Revit.Attributes.TransactionMode.Manual)]
     [Autodesk.Revit.Attributes.Regeneration(Autodesk.Revit.Attributes.RegenerationOption.Manual)]
+    // addition from step 2 here --> https://forge.autodesk.com/en/docs/design-automation/v3/tutorials/revit/step1-convert-addin/
     [Autodesk.Revit.Attributes.Journaling(Autodesk.Revit.Attributes.JournalingMode.NoCommandData)]
     public class SketchItApp : IExternalDBApplication
     {
-        public Autodesk.Revit.UI.Result Execute(ExternalCommandData commandData, ref string message, Autodesk.Revit.DB.ElementSet elements)
+        public ExternalDBApplicationResult OnStartup(Autodesk.Revit.ApplicationServices.ControlledApplication app)
+        {
+           DesignAutomationBridge.DesignAutomationReadyEvent += HandleDesignAutomationReadyEvent;
+           return ExternalDBApplicationResult.Succeeded;
+        }
+
+        public ExternalDBApplicationResult OnShutdown(Autodesk.Revit.ApplicationServices.ControlledApplication app)
+        {
+           return ExternalDBApplicationResult.Succeeded;
+        }
+
+        public void HandleDesignAutomationReadyEvent(object sender, DesignAutomationReadyEventArgs e)
+        {
+           // Run the application logic.
+           string message = "";
+           SketchItFunc(e.DesignAutomationData, message);
+           e.Succeeded = true;
+        }
+
+        private static void SketchItFunc(DesignAutomationData data, ref string message)
         {
             //Transaction newTran = null;
             // *** CODE IS RUN HERE
