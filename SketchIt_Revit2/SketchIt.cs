@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 using System.IO;
 using Autodesk.Revit.DB;
-using Autodesk.Revit.Creation;
+// using Autodesk.Revit.Creation;
 using static PW.RevitUtil;
 using static PW.WallUtils;
 using static PW.CurveUtils;
@@ -38,12 +38,27 @@ namespace PW
         {
            // Run the application logic.
            string message = "";
-           SketchItFunc(e.DesignAutomationData, message);
+           SketchItFunc(e.DesignAutomationData, ref message);
            e.Succeeded = true;
         }
 
         private static void SketchItFunc(DesignAutomationData data, ref string message)
         {
+            // <from_sketch_it>
+            if (data == null)
+                throw new InvalidDataException(nameof(data));
+            Application rvtApp = data.RevitApp;
+            if (rvtApp == null)
+                throw new InvalidDataException(nameof(rvtApp));
+            Document newDoc = rvtApp.NewProjectDocument(UnitSystem.Imperial);
+            if (newDoc == null)
+                throw new InvalidOperationException("Could not create new document.");
+            string filePath = "sketchIt.rvt";
+            // string filepathJson = "SketchItInput.json";
+            // SketchItParams jsonDeserialized = SketchItParams.Parse(filepathJson);
+            //  </from_sketch_it>
+
+
             //Transaction newTran = null;
             // *** CODE IS RUN HERE
             Console.WriteLine("INITIALIZING. LINE 25\n");
@@ -77,27 +92,32 @@ namespace PW
             //Transaction newTran = null;
             try
             {
-                if (null == commandData)
+                /*
+                if (null == data)
                 {
-                    throw new ArgumentNullException("commandData");
+                    throw new ArgumentNullException("data");
                 }
+                */
 
-                Autodesk.Revit.DB.Document doc = commandData.Application.ActiveUIDocument.Document;
-                sample_building.createRVTFile(doc, "sketchIt.rvt", false);
-                CreateSphereDirectShape(doc);
+
+                sample_building.createRVTFile(newDoc, "sketchIt.rvt", false);
+                CreateSphereDirectShape(newDoc);
 
                 //newTran = new Transaction(doc);
                 //newTran.Start("sketchIt");
                 //string filepathJson = "c:\\test\\SketchItInput.json";
                 //SketchItFunc(filepathJson, doc);
                 //newTran.Commit();
-                return Autodesk.Revit.UI.Result.Succeeded;
+
+                // return Autodesk.Revit.UI.Result.Succeeded;
+
+                newDoc.SaveAs(filePath);
             }
 
             catch (Exception ex)
             {
                 message = ex.ToString();
-                return Autodesk.Revit.UI.Result.Failed;
+                // return Autodesk.Revit.UI.Result.Failed;
             }
         }
 
