@@ -9,23 +9,29 @@ namespace PW
         public static void createRVTWalls(
         Autodesk.Revit.DB.Document targetDoc,
         List<Curve> curves_list,
-        Autodesk.Revit.DB.ElementId levelId
+        Autodesk.Revit.DB.ElementId levelId,
+        double height = 40
     )
         {
-            foreach (Curve _curve in curves_list)
+            using (Transaction wallTrans = new Transaction(targetDoc, "Creating walls"))
             {
-                // *** REQUIRES REVIT:
-                Wall newWall = Wall.Create(targetDoc, _curve, levelId, false);
-
-                IList<Parameter> UnconnectedHeigth_Params = newWall.GetParameters("Unconnected Height");
-                if (UnconnectedHeigth_Params.Count > 0)
+                wallTrans.Start();
+                foreach (Curve _curve in curves_list)
                 {
-                    if (!UnconnectedHeigth_Params[0].IsReadOnly)
+                    // *** REQUIRES REVIT:
+                    Wall newWall = Wall.Create(targetDoc, _curve, levelId, false);
+
+                    IList<Parameter> UnconnectedHeigth_Params = newWall.GetParameters("Unconnected Height");
+                    if (UnconnectedHeigth_Params.Count > 0)
                     {
-                        // can set, but the result is not 100
-                        UnconnectedHeigth_Params[0].Set(40);
+                        if (!UnconnectedHeigth_Params[0].IsReadOnly)
+                        {
+                            // can set, but the result is not 100
+                            UnconnectedHeigth_Params[0].Set(height);
+                        }
                     }
                 }
+                wallTrans.Commit();
             }
         }
     }

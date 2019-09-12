@@ -2,66 +2,60 @@
 using System.Collections.Generic;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
+using static PW.DebugUtils;
 
 namespace PW
 {
     public class CurveUtils
     {
-        public static CurveArray curveArrayFromCoords(
-           List<Coordinate> xy_coords,
-           double elevation = 0.0,
-           bool threeDimensional = false
-       )
+        public static dynamic curvesFromXYZList(
+            List<XYZ> xyzList
+        )
         {
-            CurveArray curve_array = new CurveArray();
-            //new List<Curve>();
-            // 
+            dynamic output = new List<Curve>();
+
             int coordIndex = 0;
-            int coordCount = xy_coords.Count;
+            int coordCount = xyzList.Count;
             int maxCoordIndex = coordCount - 1;
-            // 
-            foreach (Coordinate xy in xy_coords)
+              
+            foreach (XYZ _xyz in xyzList)
             {
-                Coordinate startCoord = new Coordinate(0, 0);
-                Coordinate endCoord = new Coordinate(0, 0);
+                XYZ start = new XYZ(0, 0, 0);
+                XYZ end = new XYZ(0, 0, 0);
                 if (coordIndex < maxCoordIndex)
                 {
-                    startCoord = xy_coords[coordIndex];
-                    endCoord = xy_coords[coordIndex + 1];
+                    start = xyzList[coordIndex];
+                    end = xyzList[coordIndex + 1];
                 }
                 else if (coordIndex == maxCoordIndex && coordCount > 1)
                 {
-                    startCoord = xy_coords[maxCoordIndex];
-                    endCoord = xy_coords[0];
+                    start = xyzList[maxCoordIndex];
+                    end = xyzList[0];
                 }
                 coordIndex++;
-                // *** CREATE START AND END XYZ OBJECT ***
-                // *** REQUIRES REVIT:
-                // decimal x = startCoord.x;
-                // decimal y = startCoord.y;
-                // 
-                if (threeDimensional)
+                output.Add(Line.CreateBound(start, end));
+            }
+            return output;
+        }
+        public static List<XYZ> CoordsToXYZ(
+            List<List<double>> coords_array,
+            double z_offset = 0.0,
+            bool coords_have_z = false)
+        {
+            List<XYZ> XYZList = new List<XYZ>() { };
+            foreach (List<double> coords in coords_array)
+            {
+                DebugLog("Adding XYZ to list: " + coords);
+                if (coords_have_z)
                 {
-                    XYZ startLow = new XYZ(startCoord.x, startCoord.y, 0.0);
-                    XYZ endLow = new XYZ(endCoord.x, endCoord.y, 0.0);
-                    // 
-                    XYZ startHigh = new XYZ(startCoord.x, startCoord.y, elevation);
-                    XYZ endHigh = new XYZ(endCoord.x, endCoord.y, elevation);
-                    // 
-                    curve_array.Append(Line.CreateBound(startLow, endLow));
-                    curve_array.Append(Line.CreateBound(endLow, endHigh));
-                    curve_array.Append(Line.CreateBound(endHigh, startHigh));
-                    curve_array.Append(Line.CreateBound(startHigh, startLow));
+                    XYZList.Add(new XYZ(coords[0], coords[1], coords[2]));
                 }
                 else
                 {
-                    XYZ start = new XYZ(startCoord.x, startCoord.y, elevation);
-                    XYZ end = new XYZ(endCoord.x, endCoord.y, elevation);
-                    // ADD TO curve_array ***
-                    curve_array.Append(Line.CreateBound(start, end));
+                    XYZList.Add(new XYZ(coords[0], coords[1], z_offset));
                 }
             }
-            return curve_array;
+            return XYZList;
         }
     }
 }
