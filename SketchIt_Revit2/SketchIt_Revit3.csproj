@@ -50,12 +50,17 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DebugUtils.cs" />
+    <Compile Include="FloorUtils.cs" />
+    <Compile Include="LevelUtils.cs" />
+    <Compile Include="MainUtils.cs" />
+    <Compile Include="MassformerUtils.cs" />
     <Compile Include="RevitUtil.cs" />
+    <Compile Include="SampleCode.cs" />
+    <Compile Include="ShapeUtils.cs" />
     <Compile Include="SketchItParams.cs" />
     <Compile Include="SketchIt.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ObjectDefinitions.cs" />
-    <Compile Include="BuildingObject.cs" />
     <Compile Include="WallUtils.cs" />
     <Compile Include="CurveUtils.cs" />
   </ItemGroup>

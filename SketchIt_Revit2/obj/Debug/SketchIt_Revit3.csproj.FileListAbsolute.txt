@@ -18,3 +18,12 @@ C:/Iffat/Dropbox/Iffat/RevitAPI/SourceCode-2019/_Forge/MassFormer/SketchIt_Revit
 /Users/chanmat/Desktop/Work/revit_vs/SketchIt_Revit3/SketchIt_Revit2/obj/Debug/SketchIt_Revit3.pdb
 /Users/chanmat/Desktop/Work/revit_vs/SketchIt_Revit3/SketchIt_Revit2/bin/Debug/RevitAPI.dll
 /Users/chanmat/Desktop/Work/revit_vs/SketchIt_Revit3/SketchIt_Revit2/bin/Debug/RevitAPIUI.dll
+C:\Users\chanmat\Desktop\Work\revit-vs\SketchIt_Revit2\bin\Debug\SketchIt_Revit3.dll
+C:\Users\chanmat\Desktop\Work\revit-vs\SketchIt_Revit2\bin\Debug\SketchIt_Revit3.pdb
+C:\Users\chanmat\Desktop\Work\revit-vs\SketchIt_Revit2\bin\Debug\Newtonsoft.Json.dll
+C:\Users\chanmat\Desktop\Work\revit-vs\SketchIt_Revit2\bin\Debug\Newtonsoft.Json.xml
+C:\Users\chanmat\Desktop\Work\revit-vs\SketchIt_Revit2\obj\Debug\SketchIt_Revit3.csprojAssemblyReference.cache
+C:\Users\chanmat\Desktop\Work\revit-vs\SketchIt_Revit2\obj\Debug\SketchIt_Revit3.csproj.CoreCompileInputs.cache
+C:\Users\chanmat\Desktop\Work\revit-vs\SketchIt_Revit2\obj\Debug\SketchIt_Revit3.csproj.CopyComplete
+C:\Users\chanmat\Desktop\Work\revit-vs\SketchIt_Revit2\obj\Debug\SketchIt_Revit3.dll
+C:\Users\chanmat\Desktop\Work\revit-vs\SketchIt_Revit2\obj\Debug\SketchIt_Revit3.pdb
