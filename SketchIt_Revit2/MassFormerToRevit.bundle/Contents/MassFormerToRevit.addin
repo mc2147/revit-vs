@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RevitAddIns>
+  <AddIn Type="DBApplication">
+    <Name>MassFormerToRevit</Name>
+    <Assembly>.\MassFormerToRevit.dll</Assembly>
+    <AddInId>126550AE-0211-41F3-A87D-476733F93689</AddInId>
+    <FullClassName>PW.SketchItApp</FullClassName>
+    <Description>"MassFormerToRevit"</Description>
+    <VendorId>PKWL</VendorId>
+    <VendorDescription>Perkins+Will, www.Perkinswill.com</VendorDescription>
+  </AddIn>
+</RevitAddIns>
