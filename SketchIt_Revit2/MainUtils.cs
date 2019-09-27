@@ -79,7 +79,7 @@ namespace PW
                 double wallHeight = _wall.height;
                 List<XYZ> wallXYZList = CoordsToXYZ(wallXYCoords, wallZOffset);
                 List<Curve> wallCurveList = curvesFromXYZList(wallXYZList);                
-                createRVTWalls(doc, wallCurveList, baseLevelId, wallHeight);
+                createRVTWalls(doc, wallCurveList, baseLevelId, wallHeight, wallZOffset);
             }
             // // 
             // //DebugLog("buildingData: " + buildingData);
