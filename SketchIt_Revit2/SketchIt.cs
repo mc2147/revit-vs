@@ -6,25 +6,59 @@ using System.Threading.Tasks;
 
 using System.IO;
 using Autodesk.Revit.DB;
-using Autodesk.Revit.UI;
-using Autodesk.Revit.Creation;
+// using Autodesk.Revit.Creation;
 using static PW.RevitUtil;
 using static PW.WallUtils;
 using static PW.CurveUtils;
 using static PW.BuildingObject;
 
+using Autodesk.Revit.ApplicationServices;
+using DesignAutomationFramework;
+
 namespace PW
 {
-    /// <summary>
-    /// Implements the Revit add-in interface IExternalCommand
-    /// </summary>
     [Autodesk.Revit.Attributes.Transaction(Autodesk.Revit.Attributes.TransactionMode.Manual)]
     [Autodesk.Revit.Attributes.Regeneration(Autodesk.Revit.Attributes.RegenerationOption.Manual)]
+    // addition from step 2 here --> https://forge.autodesk.com/en/docs/design-automation/v3/tutorials/revit/step1-convert-addin/
     [Autodesk.Revit.Attributes.Journaling(Autodesk.Revit.Attributes.JournalingMode.NoCommandData)]
-    public class SketchItApp : IExternalCommand
+    public class SketchItApp : IExternalDBApplication
     {
-        public Autodesk.Revit.UI.Result Execute(ExternalCommandData commandData, ref string message, Autodesk.Revit.DB.ElementSet elements)
+        public ExternalDBApplicationResult OnStartup(Autodesk.Revit.ApplicationServices.ControlledApplication app)
         {
+           DesignAutomationBridge.DesignAutomationReadyEvent += HandleDesignAutomationReadyEvent;
+           return ExternalDBApplicationResult.Succeeded;
+        }
+
+        public ExternalDBApplicationResult OnShutdown(Autodesk.Revit.ApplicationServices.ControlledApplication app)
+        {
+           return ExternalDBApplicationResult.Succeeded;
+        }
+
+        public void HandleDesignAutomationReadyEvent(object sender, DesignAutomationReadyEventArgs e)
+        {
+           // Run the application logic.
+           string message = "";
+           SketchItFunc(e.DesignAutomationData, ref message);
+           e.Succeeded = true;
+        }
+
+        private static void SketchItFunc(DesignAutomationData data, ref string message)
+        {
+            // <from_sketch_it>
+            if (data == null)
+                throw new InvalidDataException(nameof(data));
+            Application rvtApp = data.RevitApp;
+            if (rvtApp == null)
+                throw new InvalidDataException(nameof(rvtApp));
+            Document newDoc = rvtApp.NewProjectDocument(UnitSystem.Imperial);
+            if (newDoc == null)
+                throw new InvalidOperationException("Could not create new document.");
+            string filePath = "sketchIt.rvt";
+            // string filepathJson = "SketchItInput.json";
+            // SketchItParams jsonDeserialized = SketchItParams.Parse(filepathJson);
+            //  </from_sketch_it>
+
+
             //Transaction newTran = null;
             // *** CODE IS RUN HERE
             Console.WriteLine("INITIALIZING. LINE 25\n");
@@ -58,27 +92,32 @@ namespace PW
             //Transaction newTran = null;
             try
             {
-                if (null == commandData)
+                /*
+                if (null == data)
                 {
-                    throw new ArgumentNullException("commandData");
+                    throw new ArgumentNullException("data");
                 }
+                */
 
-                Autodesk.Revit.DB.Document doc = commandData.Application.ActiveUIDocument.Document;
-                sample_building.createRVTFile(doc, "sketchIt.rvt", false);
-                CreateSphereDirectShape(doc);
+
+                sample_building.createRVTFile(newDoc, "sketchIt.rvt", false);
+                CreateSphereDirectShape(newDoc);
 
                 //newTran = new Transaction(doc);
                 //newTran.Start("sketchIt");
                 //string filepathJson = "c:\\test\\SketchItInput.json";
                 //SketchItFunc(filepathJson, doc);
                 //newTran.Commit();
-                return Autodesk.Revit.UI.Result.Succeeded;
+
+                // return Autodesk.Revit.UI.Result.Succeeded;
+
+                newDoc.SaveAs(filePath);
             }
 
             catch (Exception ex)
             {
                 message = ex.ToString();
-                return Autodesk.Revit.UI.Result.Failed;
+                // return Autodesk.Revit.UI.Result.Failed;
             }
         }
 
