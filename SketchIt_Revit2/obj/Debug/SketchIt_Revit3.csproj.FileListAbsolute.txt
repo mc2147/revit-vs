@@ -27,3 +27,11 @@ C:\Users\chanmat\Desktop\Work\revit-vs\SketchIt_Revit2\obj\Debug\SketchIt_Revit3
 C:\Users\chanmat\Desktop\Work\revit-vs\SketchIt_Revit2\obj\Debug\SketchIt_Revit3.csproj.CopyComplete
 C:\Users\chanmat\Desktop\Work\revit-vs\SketchIt_Revit2\obj\Debug\SketchIt_Revit3.dll
 C:\Users\chanmat\Desktop\Work\revit-vs\SketchIt_Revit2\obj\Debug\SketchIt_Revit3.pdb
+C:\Users\matth\Desktop\Work\revit-vs\SketchIt_Revit2\bin\Debug\SketchIt_Revit3.dll
+C:\Users\matth\Desktop\Work\revit-vs\SketchIt_Revit2\bin\Debug\SketchIt_Revit3.pdb
+C:\Users\matth\Desktop\Work\revit-vs\SketchIt_Revit2\bin\Debug\Newtonsoft.Json.dll
+C:\Users\matth\Desktop\Work\revit-vs\SketchIt_Revit2\bin\Debug\Newtonsoft.Json.xml
+C:\Users\matth\Desktop\Work\revit-vs\SketchIt_Revit2\obj\Debug\SketchIt_Revit3.csprojAssemblyReference.cache
+C:\Users\matth\Desktop\Work\revit-vs\SketchIt_Revit2\obj\Debug\SketchIt_Revit3.csproj.CopyComplete
+C:\Users\matth\Desktop\Work\revit-vs\SketchIt_Revit2\obj\Debug\SketchIt_Revit3.dll
+C:\Users\matth\Desktop\Work\revit-vs\SketchIt_Revit2\obj\Debug\SketchIt_Revit3.pdb

@@ -21,7 +21,7 @@ namespace PW
 
     public class SketchItApp : IExternalCommand
     {
-        public string sampleJSONPath = "C:\\Users\\chanmat\\Desktop\\Work\\revit-vs\\sample.json";
+        public string sampleJSONPath = "C:\\Users\\matth\\Desktop\\sample.json";
         public Autodesk.Revit.UI.Result Execute(ExternalCommandData commandData, ref string message, Autodesk.Revit.DB.ElementSet elements)
         {            
             try
