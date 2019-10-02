@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Autodesk.Revit.DB;
-using Autodesk.Revit.UI;
+//using Autodesk.Revit.UI;
 using static PW.DebugUtils;
 
 namespace PW
@@ -45,7 +45,7 @@ namespace PW
             List<XYZ> XYZList = new List<XYZ>() { };
             foreach (List<double> coords in coords_array)
             {
-                DebugLog("Adding XYZ to list: " + coords);
+//                DebugLog("Adding XYZ to list: " + coords);
                 if (coords_have_z)
                 {
                     XYZList.Add(new XYZ(coords[0], coords[1], coords[2]));

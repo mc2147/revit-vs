@@ -5,6 +5,14 @@ using Newtonsoft.Json;
 
 namespace PW
 {
+
+    public class MassformerContext
+    {
+        public List<List<double>> xycoordinates { get; set; }
+        public double height { get; set; }
+    }
+
+
     public class MassformerBuilding
     {
         public List<List<double>> xycoordinates { get; set; }
@@ -20,6 +28,7 @@ namespace PW
         public Dictionary<string, MFB> buildings { get; set; }
         public List<MassformerWall> walls { get; set; }
         public List<MassformerFloor> floors { get; set; }
+        public List<MassformerContext> context { get; set; }
         public string units { get; set; }
     }
 

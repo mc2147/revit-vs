@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Autodesk.Revit.DB;
-using Autodesk.Revit.UI;
-using Autodesk.Revit.Creation;
+//using Autodesk.Revit.UI;
+//using Autodesk.Revit.Creation;
 
 // *** CAN DELETE
 namespace PW
@@ -51,8 +51,8 @@ namespace PW
             //
             //            curve_list.Add(Line.CreateBound(corner1b, corner2b));
             //            curve_list.Add(Line.CreateBound(corner2b, corner3b));
-            //          curve_list.Add(Line.CreateBound(corner3b, corner4b));
-            //           curve_list.Add(Line.CreateBound(corner4b, corner1b));
+            //            curve_list.Add(Line.CreateBound(corner3b, corner4b));
+            //            curve_list.Add(Line.CreateBound(corner4b, corner1b));
             //
             //            curve_list.Add(Line.CreateBound(corner1, corner1b));
             //            curve_list.Add(Line.CreateBound(corner2, corner2b));

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 using System.IO;
 using Autodesk.Revit.DB;
-using Autodesk.Revit.UI;
+//using Autodesk.Revit.UI; //No UI for Forge auotmation
 using Autodesk.Revit.Creation;
 using static PW.RevitUtil;
 using static PW.WallUtils;
@@ -17,7 +17,6 @@ using static PW.ShapeUtils;
 using static PW.LevelUtils;
 using static PW.DebugUtils;
 using Newtonsoft.Json;
-
 
 namespace PW
 {
@@ -31,24 +30,82 @@ namespace PW
        )
         {
             // *** Extracting data from JSON:
+            DebugLog("\n\nLINE 33\n\n ");
             MassformerData MFData = JsonPathToMFO(jsonPath);
             // *** For each MFData object:
+            DebugLog("\n\nLINE 36\n\n ");
             CreateRVTModels(doc, MFData);
             // *** Save toggle option
             if (saveFile)
             {
+                DebugLog("\n\nSTARTING SAVE\n\n ");
                 Transaction saveTrans = new Transaction(doc);
                 saveTrans.Start("sketchIt");
-                doc.SaveAs(saveFilePath);
                 saveTrans.Commit();
+                doc.SaveAs(saveFilePath);
+                DebugLog("\n\nENDING SAVE\n\n ");
             }
         }
 
         public static void CreateRVTModels(
-            Autodesk.Revit.DB.Document doc,
-            MassformerData buildingData
-        )
+           Autodesk.Revit.DB.Document doc,
+           MassformerData buildingData
+       )
         {
+            DebugLog("\n\nLINE 52\n\n ");
+            FillPattern newFillPattern = new FillPattern(
+                "SolidFill", 
+                FillPatternTarget.Drafting, 
+                FillPatternHostOrientation.ToView,
+                0.5, 0.5, 0.5
+            );
+            DebugLog("newFillPattern.IsSolidFill: " + newFillPattern.IsSolidFill);
+            using (Transaction t = new Transaction(doc, "Create fill pattern"))
+            {
+                t.Start();
+                FillPatternElement patternElement = FillPatternElement.Create(doc, newFillPattern);
+                t.Commit();
+            }
+
+            FilteredElementCollector collector = new FilteredElementCollector(doc);
+            IList<Element> fillPatternElements = collector.OfClass(typeof(FillPatternElement)).ToElements();
+            ElementId fillPatternId = fillPatternElements[0].Id;
+            foreach (Element fill_pattern in fillPatternElements) {
+                DebugLog("fill_pattern.Name: " + fill_pattern.Name + " " + fill_pattern.Id);
+                if (fill_pattern.Name == "<Solid fill>")
+                {
+                    DebugLog("Solid fill found " + fill_pattern.Id);
+                    fillPatternId = fill_pattern.Id;
+                }
+            }
+            DebugLog("fillPatternId: " + fillPatternId);
+
+            List<MassformerContext> context = buildingData.context;
+            foreach (MassformerContext _context in context) {
+                double contextHeight = _context.height;
+                List<List<double>> contextXYCoords = _context.xycoordinates;
+                if (contextXYCoords.Count > 0)
+                {
+                    try
+                    {
+                        // ***
+                        CreateShape(doc, contextXYCoords, 0, contextHeight, fillPatternId);
+                    }
+                    catch(Exception contextError)
+                    {
+                        DebugLog("contextError: " + contextError + " coords: " + contextXYCoords);
+                        string coords_log = "";
+                        foreach (List<double> xy_coord in contextXYCoords)
+                        {
+                            DebugLog("coords: " + xy_coord[0] + " " + xy_coord[1]);
+                            coords_log = coords_log + "[" + xy_coord[0] + ", " + xy_coord[1] + "],";
+                        }
+                        DebugLog("coords_log: " + coords_log);
+                    }
+                }
+            }
+            DebugLog("\n\nLINE 80\n\n ");
+            // ***
             Dictionary<string, MFB> buildings = buildingData.buildings;
             // ***
             List<MassformerFloor> floorsList = buildingData.floors;
@@ -57,7 +114,9 @@ namespace PW
             // ***
             Autodesk.Revit.DB.ElementId baseLevelId = new ElementId(BuiltInCategory.OST_Levels);
             // *** CREATING FLOORS AND MASSES:
-            foreach (MassformerFloor _floor in floorsList) {
+            DebugLog("\n\nLINE 90\n\n ");
+            foreach (MassformerFloor _floor in floorsList)
+            {
                 // 
                 double floorZOffset = _floor.zOffset;
                 List<List<double>> floorXYCoords = _floor.xycoordinates;
@@ -65,57 +124,78 @@ namespace PW
                 int floorNumber = _floor.floorNumber;
                 // ***
                 CreateFloor(doc, floorXYCoords, floorZOffset);
-                CreateShape(doc, floorXYCoords, floorZOffset, massHeight);
+                CreateShape(doc, floorXYCoords, floorZOffset, massHeight, fillPatternId);
                 //
-                ElementId levelId = CreateLevel(doc, floorZOffset, "My Level " + (floorNumber - 1));
-                if (floorNumber == 1) {
+                ElementId levelId = CreateLevel(doc, floorZOffset);
+                if (floorNumber == 1)
+                {
                     baseLevelId = levelId;
                 }
             }
+            DebugLog("\n\nLINE 108\n\n ");
             // *** CREATING WALLS:
-            foreach (MassformerWall _wall in walls) {
+            foreach (MassformerWall _wall in walls)
+            {
                 double wallZOffset = _wall.zOffset;
                 List<List<double>> wallXYCoords = _wall.xycoordinates;
                 double wallHeight = _wall.height;
                 List<XYZ> wallXYZList = CoordsToXYZ(wallXYCoords, wallZOffset);
-                List<Curve> wallCurveList = curvesFromXYZList(wallXYZList);                
+                List<Curve> wallCurveList = curvesFromXYZList(wallXYZList);
                 createRVTWalls(doc, wallCurveList, baseLevelId, wallHeight, wallZOffset);
             }
-            // // 
-            // //DebugLog("buildingData: " + buildingData);
-            // int floors = buildingData.floors;
-            // double groundFloorHeight = buildingData.groundFloorHeight;
-            // double floorHeight = buildingData.floorHeight;
-            // double buildingHeight = groundFloorHeight + floorHeight * (floors - 1);
-            // List<List<double>> xy_coords = buildingData.xycoordinates;
-            // List<Program> buildingPrograms = buildingData.programs;
-            // List<XYZ> XYZList = CoordsToXYZ(buildingData.xycoordinates);
-            // List<Curve> curveList = curvesFromXYZList(XYZList);
-            // //DebugLog("XYZList: " + XYZList);
-            // //DebugLog("curveList: " + curveList);
-            // // *** Create first floor with first floor height
-            // // *** Create subsequent floors and shapes with floorHeight
-            // //CurveLoop curveLoop = CurveLoop.Create(curveList);
-            // //CreateFloor(doc, xy_coords, 0);
-            // //CreateShape(doc, xy_coords, 0, groundFloorHeight);
-            // for (int floorIndex = 0; floorIndex < floors; floorIndex++)
-            // {
-            //     //*** 0 for ground, gfH for 1st index = 1, gFH + fI * fH for index > 1
-            //     double zOffset = floorIndex == 0 ? 0
-            //         :
-            //         floorIndex == 1 ?
-            //             groundFloorHeight
-            //             :
-            //             groundFloorHeight + (floorIndex - 1) * floorHeight;
-            //     double shapeHeight = floorIndex == 0 ? groundFloorHeight : floorHeight;
-            //     CreateFloor(doc, xy_coords, zOffset);
-            //     CreateShape(doc, xy_coords, zOffset, shapeHeight);
-            //     ElementId levelId = CreateLevel(doc, zOffset, "Matt's Level " + floorIndex);
-            //     if (floorIndex == 0) { baseLevelId = levelId; }
-            // }
-            // // CreateWalls(doc, xy_coords, zOffset, height)
-            // // *** Create walls
-            // createRVTWalls(doc, curveList, baseLevelId, buildingHeight);
+            DebugLog("\n\nLINE 119\n\n ");
+            Color color = new Color(30, 250, 52); // RGB (0, 255, 255)
+
+            OverrideGraphicSettings ogs = new OverrideGraphicSettings();
+            //
+            ogs.SetCutBackgroundPatternId(fillPatternId);
+            ogs.SetCutBackgroundPatternColor(color);
+            ogs.SetCutBackgroundPatternVisible(true);
+            //
+            //ogs.SetProjectionLinePatternId();
+            ogs.SetProjectionLineColor(color);
+            //
+            ogs.SetSurfaceForegroundPatternId(fillPatternId);
+            ogs.SetSurfaceForegroundPatternColor(color);
+            ogs.SetSurfaceForegroundPatternVisible(true);
+            //
+            ogs.SetSurfaceBackgroundPatternId(fillPatternId);
+            ogs.SetSurfaceBackgroundPatternColor(color);
+            ogs.SetSurfaceBackgroundPatternVisible(true);
+            //
+            ogs.SetCutForegroundPatternId(fillPatternId);
+            ogs.SetCutForegroundPatternColor(color);
+            ogs.SetCutForegroundPatternVisible(true);
+            //
+            //ogs.SetCutLinePatternId(fillPatternId);
+            ogs.SetCutLineColor(color);
+            //
+            ogs.SetSurfaceTransparency(0);
+
+            using (Transaction t = new Transaction(doc, "Set Fill Pattern Walls"))
+            {
+                t.Start();
+
+                foreach (Element wall in new FilteredElementCollector(doc, doc.ActiveView.Id).OfClass(typeof(Wall)))
+                {
+                    doc.ActiveView.SetElementOverrides(wall.Id, ogs);
+                }
+
+                t.Commit();
+            }
+
+            using (Transaction t = new Transaction(doc, "Set Fill Pattern Floors"))
+            {
+                t.Start();
+
+                foreach (Element floor in new FilteredElementCollector(doc, doc.ActiveView.Id).OfClass(typeof(Floor)))
+                {
+                    doc.ActiveView.SetElementOverrides(floor.Id, ogs);
+                }
+
+                t.Commit();
+            }
+
         }
     }
 }

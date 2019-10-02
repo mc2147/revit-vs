@@ -10,6 +10,10 @@ using Autodesk.Revit.UI;
 using Autodesk.Revit.Creation;
 using static PW.MainUtils;
 
+using RvtApplication = Autodesk.Revit.ApplicationServices.Application;
+using RvtDocument = Autodesk.Revit.DB.Document;
+using static PW.DebugUtils;
+
 namespace PW
 {
     /// <summary>
@@ -21,20 +25,35 @@ namespace PW
 
     public class SketchItApp : IExternalCommand
     {
-        public string sampleJSONPath = "C:\\Users\\matth\\Desktop\\sample.json";
+        public string sampleJSONPath = "C:\\Users\\matth\\Desktop\\RevitJSONs\\9-30-19-16-54-21\\sample.json";
+        //C:\Users\matth\Desktop\RevitJSONs\9-30-19-16-02-39
+        //9-30-19-16-04-33
+        //9-30-19-16-06-10
+        //9-30-19-16-08-30
+        //9-30-19-16-09-11
+        //9-30-19-16-09-54
+        //9-30-19-16-28-08
+        //9-30-19-16-34-04
+        //9-30-19-16-45-30
+        //9-30-19-16-54-21
+        //9-30-19-16-58-24
+
         public Autodesk.Revit.UI.Result Execute(ExternalCommandData commandData, ref string message, Autodesk.Revit.DB.ElementSet elements)
-        {            
+        {
+            DebugLog("\nSKETCHIT.CS LINE 33\n");
             try
             {
+                DebugLog("\nSKETCHIT.CS LINE 38\n");
                 if (null == commandData)
                 {
                     throw new ArgumentNullException("commandData");
                 }
-                Autodesk.Revit.DB.Document doc = commandData.Application.ActiveUIDocument.Document;
-
+                DebugLog("\nSKETCHIT.CS LINE 41\n");
+                RvtDocument doc = commandData.Application.ActiveUIDocument.Document;
                 MassformerJsonToRvt(doc, sampleJSONPath);
                 // *** Sample Code:
                 //CreateSphereDirectShape(doc);
+                DebugLog("\nSKETCHIT.CS LINE 46\n");
 
                 return Autodesk.Revit.UI.Result.Succeeded;
             }
